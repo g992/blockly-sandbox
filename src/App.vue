@@ -35,8 +35,15 @@ export default {
             <block type="logic_negate"></block>
             <block type="logic_boolean"></block>
           </category>
-          
+          <category name="Math" colour="%{BKY_MATH_HUE}">
+            <block type="math_number">
+              <field name="NUM">123</field>
+            </block>
+            <block type="math_arithmetic"></block>
+            <block type="math_single"></block>
+          </category>
           <category name="Indicators" colour="%{BKY_LOOPS_HUE}">
+            <block type="base"></block>
             <block type="var"></block>
             <block type="rsi"></block>
             <block type="stock_buy_prog"></block>
@@ -69,8 +76,8 @@ body {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: 25%;
   margin: 0;
   background-color: beige;
 }
@@ -78,14 +85,7 @@ body {
   position: absolute;
   right: 0;
   top: 0;
-  width: 50%;
-  height: 50%;
-}
-#blockly2 {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 50%;
-  height: 50%;
+  width: 100%;
+  height: 75%;
 }
 </style>

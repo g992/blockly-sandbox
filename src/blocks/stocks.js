@@ -49,8 +49,7 @@ const priceDropdown = [
 
 Blockly.Blocks["rsi"] = {
   init: function () {
-    this.appendValueInput("Number")
-      .setCheck("Number")
+    this.appendDummyInput()
       .appendField("RSI at")
       .appendField(new Blockly.FieldDropdown(timeframeDropdown), "timeframe")
       .appendField("period")
@@ -61,8 +60,6 @@ Blockly.Blocks["rsi"] = {
       .appendField(new Blockly.FieldNumber(1), "index");
     this.setOutput(true);
     this.setColour(230);
-    this.setTooltip("buy id");
-    this.setHelpUrl("https://example.com");
   }
 };
 
@@ -71,29 +68,44 @@ Blockly.JavaScript["rsi"] = function (block) {
   var period = block.getFieldValue("period");
   var price = block.getFieldValue("price");
   var index = block.getFieldValue("index");
-  var code = `RSI(${timeframe},${period},${price},${index})`;
+  var code = `RSI('${timeframe}',${period},${price},${index})`;
   return code;
 };
 
 Blockly.Blocks["var"] = {
   init: function () {
     this.setOutput(true, "Number");
-
-    // this.setOutput(true);
-
-    // this.appendValueInput("Number")
-    //   .setCheck("Number")
-    //   .appendField(new Blockly.FieldNumber(0), "variable");
-    // this.setColour(230);
-    // this.setTooltip("variable");
-    // this.setHelpUrl("https://example.com");
+    this.appendDummyInput().appendField(new Blockly.FieldNumber(0), "variable");
+    this.setColour(230);
+    this.setTooltip("variable");
+    this.setHelpUrl("https://example.com");
   }
 };
 
 Blockly.JavaScript["var"] = function (block) {
   var variable = block.getFieldValue("variable");
-  var code = `${variable}`;
-  return code;
+  return variable;
+};
+
+Blockly.Blocks["base"] = {
+  init: function () {
+    this.appendValueInput("BaseExpr").appendField("Base");
+    this.setInputsInline(true);
+    this.setColour(65);
+  }
+};
+
+Blockly.JavaScript["base"] = function (block) {
+  console.log(block);
+  var value_baseexpr = block.getFieldValue("BaseExpr");
+  Blockly.JavaScript.valueToCode(
+    block,
+    "BaseExpr",
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  console.log(value_baseexpr);
+
+  return value_baseexpr;
 };
 
 Blockly.Blocks["stock_buy_simple"] = {
