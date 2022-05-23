@@ -26,22 +26,74 @@
 
 import * as Blockly from "blockly/core";
 
+const timeframeDropdown = [
+  ["1m", "1m"],
+  ["3m", "3m"],
+  ["5m", "5m"],
+  ["15m", "15m"],
+  ["1h", "1h"],
+  ["2h", "2h"],
+  ["4h", "4h"],
+  ["12h", "12h"],
+  ["1d", "1d"],
+  ["1w", "1w"],
+  ["1M", "1M"]
+];
+
+const priceDropdown = [
+  ["open", "open"],
+  ["high", "high"],
+  ["low", "low"],
+  ["close", "close"]
+];
+
 Blockly.Blocks["rsi"] = {
   init: function () {
     this.appendValueInput("Number")
       .setCheck("Number")
       .appendField("RSI at")
-      .appendField(new Blockly.FieldNumber(1), "ID")
-      .appendField("For amount")
-      .appendField(new Blockly.FieldNumber(0), "Amount")
-      .appendField("At Price")
-      .appendField(new Blockly.FieldNumber(0), "Price");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, "String");
+      .appendField(new Blockly.FieldDropdown(timeframeDropdown), "timeframe")
+      .appendField("period")
+      .appendField(new Blockly.FieldNumber(14), "period")
+      .appendField("price")
+      .appendField(new Blockly.FieldDropdown(priceDropdown), "price")
+      .appendField("index")
+      .appendField(new Blockly.FieldNumber(1), "index");
+    this.setOutput(true);
     this.setColour(230);
     this.setTooltip("buy id");
     this.setHelpUrl("https://example.com");
   }
+};
+
+Blockly.JavaScript["rsi"] = function (block) {
+  var timeframe = block.getFieldValue("timeframe");
+  var period = block.getFieldValue("period");
+  var price = block.getFieldValue("price");
+  var index = block.getFieldValue("index");
+  var code = `RSI(${timeframe},${period},${price},${index})`;
+  return code;
+};
+
+Blockly.Blocks["var"] = {
+  init: function () {
+    this.setOutput(true, "Number");
+
+    // this.setOutput(true);
+
+    // this.appendValueInput("Number")
+    //   .setCheck("Number")
+    //   .appendField(new Blockly.FieldNumber(0), "variable");
+    // this.setColour(230);
+    // this.setTooltip("variable");
+    // this.setHelpUrl("https://example.com");
+  }
+};
+
+Blockly.JavaScript["var"] = function (block) {
+  var variable = block.getFieldValue("variable");
+  var code = `${variable}`;
+  return code;
 };
 
 Blockly.Blocks["stock_buy_simple"] = {

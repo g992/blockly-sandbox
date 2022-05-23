@@ -37,6 +37,7 @@ export default {
           </category>
           
           <category name="Indicators" colour="%{BKY_LOOPS_HUE}">
+            <block type="var"></block>
             <block type="rsi"></block>
             <block type="stock_buy_prog"></block>
             <block type="stock_fetch_price"></block>
