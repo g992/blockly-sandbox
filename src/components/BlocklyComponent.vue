@@ -1,44 +1,55 @@
 <template>
   <div>
     <div class="blocklyDiv" ref="blocklyDiv"></div>
-    <xml ref="blocklyToolbox" style="display: none">
-      <slot></slot>
-    </xml>
+    <xml> </xml>
   </div>
 </template>
 
 <script>
-/**
- * @license
- *
- * Copyright 2019 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/**
- * @fileoverview Blockly Vue Component.
- * @author samelh@google.com (Sam El-Husseini)
- */
-import Blockly from "blockly";
+import * as Blockly from "blockly";
+import { ZoomToFitControl } from "@blockly/zoom-to-fit";
+import { createPlayground, toolboxCategories } from "@blockly/dev-tools";
+import {
+  ScrollOptions,
+  ScrollBlockDragger,
+  ScrollMetricsManager,
+} from "@blockly/plugin-scroll-options";
+
 export default {
   name: "BlocklyComponent",
   props: ["options"],
   mounted() {
-    var options = this.$props.options || {};
+    var options = this.$props.options || {
+      toolbox: toolboxCategories,
+      zoom: {
+        controls: true,
+      },
+      plugins: {
+        // These are both required.
+        blockDragger: ScrollBlockDragger,
+        metricsManager: ScrollMetricsManager,
+      },
+      move: {
+        wheel: true, // Required for wheel scroll to work.
+      },
+    };
     if (!options.toolbox) {
       options.toolbox = this.$refs["blocklyToolbox"];
     }
-    this.workspace = Blockly.inject(this.$refs["blocklyDiv"], options);
+
+    createPlayground(this.$refs["blocklyDiv"], this.createWorkspace, options);
+  },
+  methods: {
+    createWorkspace(blocklyDiv, options) {
+      this.workspace = Blockly.inject(blocklyDiv, options);
+
+      const zoomToFit = new ZoomToFitControl(this.workspace);
+      zoomToFit.init();
+      const scroller = new ScrollOptions(this.workspace);
+      scroller.init();
+
+      return this.workspace;
+    },
   },
 };
 </script>
